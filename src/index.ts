@@ -23,7 +23,20 @@ createConnection()
     await connection.manager.save(todo);
     console.log("Saved a new todo with id: " + todo.id);
 
-    const todos = await connection.manager.find(Todo);
+    let todos = await connection.manager.find(Todo);
+    console.log("Loaded todos: ", todos);
+
+    let todoRepository = await connection.getRepository(Todo);
+    const todoToUpdate = await todoRepository.findOneById(
+      "5ad861759c049011930721f4"
+    );
+    todoToUpdate.text = "updatedddddd !!!!!!";
+
+    await todoRepository.save(todoToUpdate);
+
+    console.log("after update");
+
+    todos = await connection.manager.find(Todo);
     console.log("Loaded todos: ", todos);
   })
   .catch(error => console.log(error));
